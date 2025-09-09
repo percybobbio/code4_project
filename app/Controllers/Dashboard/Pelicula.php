@@ -1,22 +1,29 @@
 <?php
 
-namespace App\Controllers;
+namespace App\Controllers\Dashboard;
 
+use App\Controllers\BaseController;
 use App\Models\PeliculaModel;
 
 class Pelicula extends BaseController
 {
+    public function test($id1, $id2)
+    {
+        echo 'Test method with ID1: ' . $id1 . ' and ID2: ' . $id2;
+    }
+
     public function index()
     {
         $peliculaModel = new PeliculaModel();
-        echo view('pelicula/index',[
+        echo view('dashboard/pelicula/index',[
             'peliculas' => $peliculaModel->findAll()
         ]);
     }
 
     public function new()
     {
-        echo view('pelicula/new', [
+        //return redirect()->to('test');
+        echo view('dashboard/pelicula/new', [
             'pelicula' => [
                 'titulo' => '',
                 'descripcion' => ''
@@ -26,7 +33,7 @@ class Pelicula extends BaseController
 
     public function show($id){
         $peliculaModel = new PeliculaModel();
-        echo view('pelicula/show', ['pelicula' => $peliculaModel->find($id)]);
+        echo view('dashboard/pelicula/show', ['pelicula' => $peliculaModel->find($id)]);
     }
 
     public function create(){
@@ -36,13 +43,14 @@ class Pelicula extends BaseController
             'descripcion' => $this->request->getPost('descripcion')
         ]);
 
-        echo 'creado';
+        return redirect()->route('dashboard/pelicula');
+        
     }
 
     public function edit($id) {
         $peliculaModel = new PeliculaModel();
 
-        echo view('pelicula/edit',[
+        echo view('dashboard/pelicula/edit',[
             'pelicula' => $peliculaModel->find($id)
         ]);
     }
@@ -54,12 +62,13 @@ class Pelicula extends BaseController
             'descripcion' => $this->request->getPost('descripcion')
         ]);
 
-        echo 'actualizado';
+        //return redirect()->to('/dashboard/pelicula');
+        return redirect()->to('dashboard/pelicula');
     }
 
     public function delete($id){
         $peliculaModel = new PeliculaModel();
         $peliculaModel->delete($id);
-        echo 'eliminado';
+        return redirect()->back();
     }
 }

@@ -3,29 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Categorias</title>
+    <title>Peliculas</title>
 </head>
 <body>
-    <h1>Listado de categorias</h1>
+    <h1>Listado de peliculas</h1>
 
-    <a href="/categoria/new">Crear</a>
+    <a href="<?= route_to('test', 5, 10) ?>">Test</a>
+    <a href="/dashboard/pelicula/new">Crear</a>
 
     <table>
         <thead>
             <tr>
                 <th>Título</th>
+                <th>Descripción</th>
                 <th>Opciones</th>
             </tr>
         </thead>
         <tbody>
-            <?php foreach($categorias as $key => $p) : ?>
+            <?php foreach($peliculas as $key => $p) : ?>
                 <tr>
                     <td><?= $p['id'] ?></td>
                     <td><?= $p['titulo'] ?></td>
+                    <td><?= $p['descripcion'] ?></td>
                     <td>
-                        <a href="/categoria/show/<?= $p['id'] ?>">Ver</a>
-                        <a href="/categoria/edit/<?= $p['id'] ?>">Editar</a>
-                        <form action="/categoria/delete/<?= $p['id'] ?>" method="post">
+                        <a href="/dashboard/pelicula/show/<?= $p['id'] ?>">Ver</a>
+                        <a href="/dashboard/pelicula/edit/<?= $p['id'] ?>">Editar</a>
+                        <form action="/dashboard/pelicula/delete/<?= $p['id'] ?>" method="post">
                             <button type="submit">Eliminar</button>
                         </form>
                     </td>
