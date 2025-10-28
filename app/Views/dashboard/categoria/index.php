@@ -8,6 +8,9 @@
 <body>
     <h1>Listado de categorias</h1>
 
+    <?= view('/partials/_session') ?>
+    <?= session('key') ?>
+
     <a href="/dashboard/categoria/new">Crear</a>
 
     <table>

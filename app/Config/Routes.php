@@ -7,12 +7,12 @@ use CodeIgniter\Router\RouteCollection;
  */
 $routes->get('/', 'Home::index');
 
-$routes->get('pelicula', 'Pelicula::index');
+//$routes->get('pelicula', 'Pelicula::index');
 
 
 $routes->group('dashboard', function($routes){
     $routes->presenter('pelicula' , ['controller' => 'Dashboard\Pelicula']);
-    $routes->get('index', 'Pelicula::index', ['as' => 'pelicula.index']);
+    //$routes->get('index', 'Pelicula::index', ['as' => 'pelicula.index']);
     $routes->presenter('categoria' , ['controller' => 'Dashboard\Categoria']);
     //Para mostrar solo las rutas deseadas
     //$routes->presenter('categoria', ['only' => ['index', 'show']]);

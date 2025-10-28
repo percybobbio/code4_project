@@ -6,7 +6,8 @@
     <title>Crear Pelicula</title>
 </head>
 <body>
-    <form action="dashboard/pelicula/create" method="post">
+    <?= view('/partials/_session') ?>
+    <form action="/dashboard/pelicula/create" method="post">
         <?= view('dashboard/pelicula/_form', ['op' => 'Crear Película'])?>
     </form>
 </body>

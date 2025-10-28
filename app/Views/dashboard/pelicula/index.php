@@ -8,6 +8,8 @@
 <body>
     <h1>Listado de peliculas</h1>
 
+    <?= view('/partials/_session') ?>
+
     <a href="<?= route_to('test', 5, 10) ?>">Test</a>
     <a href="/dashboard/pelicula/new">Crear</a>
 

@@ -43,7 +43,7 @@ class Pelicula extends BaseController
             'descripcion' => $this->request->getPost('descripcion')
         ]);
 
-        return redirect()->route('dashboard/pelicula');
+        return redirect()->to('dashboard/pelicula')->with('mensaje', 'Película creada correctamente');
         
     }
 
@@ -63,12 +63,12 @@ class Pelicula extends BaseController
         ]);
 
         //return redirect()->to('/dashboard/pelicula');
-        return redirect()->to('dashboard/pelicula');
+        return redirect()->to('dashboard/pelicula')->with('mensaje', 'Película actualizada correctamente');
     }
 
     public function delete($id){
         $peliculaModel = new PeliculaModel();
         $peliculaModel->delete($id);
-        return redirect()->back();
+        return redirect()->back()->with('mensaje', 'Película eliminada correctamente');
     }
 }
