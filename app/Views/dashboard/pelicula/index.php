@@ -1,16 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Peliculas</title>
-</head>
-<body>
-    <h1>Listado de peliculas</h1>
-
-    <?= view('/partials/_session') ?>
-
-    <a href="<?= route_to('test', 5, 10) ?>">Test</a>
+<?= $this->extend('/Layouts/dashboard') ?>
+<?= $this->section('contenido') ?>
+        <a href="<?= route_to('test', 5, 10) ?>">Test</a>
     <a href="/dashboard/pelicula/new">Crear</a>
 
     <table>
@@ -38,5 +28,4 @@
             <?php endforeach; ?>
         </tbody>
     </table>
-</body>
-</html>
+<?= $this->endSection() ?>
