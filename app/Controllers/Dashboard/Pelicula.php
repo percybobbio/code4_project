@@ -38,10 +38,20 @@ class Pelicula extends BaseController
 
     public function create(){
         $peliculaModel = new PeliculaModel();
-        $peliculaModel->save([
-            'titulo' => $this->request->getPost('titulo'),
-            'descripcion' => $this->request->getPost('descripcion')
-        ]);
+
+        if ($this->validate('peliculas')) {
+            $peliculaModel->save([
+                'titulo' => $this->request->getPost('titulo'),
+                'descripcion' => $this->request->getPost('descripcion')
+            ]);
+
+        }else{
+            session()->setFlashdata([
+                'validation' => $this->validator
+            ]);
+
+            return redirect()->back()->withInput();
+        }
 
         return redirect()->to('dashboard/pelicula')->with('mensaje', 'Película creada correctamente');
         
@@ -57,10 +67,20 @@ class Pelicula extends BaseController
 
     public function update($id) {
         $peliculaModel = new PeliculaModel();
-        $peliculaModel->update($id,[
-            'titulo' => $this->request->getPost('titulo'),
-            'descripcion' => $this->request->getPost('descripcion')
-        ]);
+
+        if ($this->validate('peliculas')) {
+            $peliculaModel->update($id,[
+                'titulo' => $this->request->getPost('titulo'),
+                'descripcion' => $this->request->getPost('descripcion')
+            ]);
+        }else{
+            session()->setFlashdata([
+                'validation' => $this->validator
+            ]);
+
+            return redirect()->back()->withInput();
+        }
+
 
         //return redirect()->to('/dashboard/pelicula');
         return redirect()->to('dashboard/pelicula')->with('mensaje', 'Película actualizada correctamente');
