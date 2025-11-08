@@ -15,6 +15,7 @@ class Pelicula extends BaseController
     public function index()
     {
         $peliculaModel = new PeliculaModel();
+
         echo view('dashboard/pelicula/index',[
             'peliculas' => $peliculaModel->findAll()
         ]);
@@ -24,16 +25,14 @@ class Pelicula extends BaseController
     {
         //return redirect()->to('test');
         echo view('dashboard/pelicula/new', [
-            'pelicula' => [
-                'titulo' => '',
-                'descripcion' => ''
-            ]
+            'pelicula' => new PeliculaModel()
         ]);
     }
 
     public function show($id){
         $peliculaModel = new PeliculaModel();
-        echo view('dashboard/pelicula/show', ['pelicula' => $peliculaModel->find($id)]);
+        echo view('dashboard/pelicula/show',
+         ['pelicula' => $peliculaModel->asObject()->find($id)]);
     }
 
     public function create(){
