@@ -1,5 +1,6 @@
 <?php
 
+use App\Controllers\Api\Pelicula;
 use App\Controllers\Web\Usuario;
 use CodeIgniter\Router\RouteCollection;
 
@@ -9,6 +10,12 @@ use CodeIgniter\Router\RouteCollection;
 $routes->get('/', 'Home::index');
 
 //$routes->get('pelicula', 'Pelicula::index');
+
+$routes->group('api', function($routes){
+    $routes->get('test', 'Api\Pelicula::test');
+    $routes->resource('pelicula', ['controller' => 'Api\Pelicula']);
+    $routes->resource('categoria', ['controller' => 'Api\Categoria']);
+});
 
 
 $routes->group('dashboard', function($routes){
