@@ -47,7 +47,7 @@ class Usuario extends BaseController
         $contrasena = $this->request->getPost('contrasena');
 
         $usuario = $usuarioModel->select('id, usuario, email, contrasena, tipo')
-                                ->orWhere('email', $email)
+                                ->where('email', $email)
                                 ->orWhere('usuario', $email)
                                 ->first();
     
@@ -62,6 +62,13 @@ class Usuario extends BaseController
 
             return redirect()->to('/dashboard/categoria')->with('mensaje', 'Bienvenid@ ' . $usuario->usuario);
         }
+
+        log_message('debug', 'Login debug', [
+            'email'  => $email,
+            'pass'   => $contrasena,
+            'user'   => $usuario,
+            'verify' => $usuario ? $usuarioModel->contrasenaVerificar($contrasena, $usuario->contrasena) : null,
+        ]);        
 
         return redirect()->back()->with('mensaje', 'Usuario y/o contraseña invalida');
     }

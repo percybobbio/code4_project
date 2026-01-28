@@ -9,7 +9,9 @@ class TodoSeeder extends Seeder
     public function run()
     {
         //
+        //$this->call('UsuarioSeeder');
         $this->call('CategoriaSeeder');
         $this->call('PeliculaSeeder');
+        $this->call('EtiquetaSeeder');
     }
 }

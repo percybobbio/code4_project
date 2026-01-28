@@ -4,16 +4,15 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class PeliculaModel extends Model
+class PeliculaEtiquetaModel extends Model
 {
-    protected $DBGroup          = 'default';
-    protected $table            = 'peliculas';
+    protected $table            = 'pelicula_etiqueta';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'object';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['titulo', 'descripcion', 'categoria_id'];
+    protected $allowedFields    = ['etiqueta_id', 'pelicula_id'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
@@ -44,20 +43,4 @@ class PeliculaModel extends Model
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
-
-    public function getImagesById($id){
-        $this->select("i.*");
-        $this->join("pelicula_imagen pi", "pi.pelicula_id = peliculas.id");
-        $this->join("imagenes i", "i.id = pi.imagen_id");
-        $this->where("peliculas.id", $id);
-        return $this->findAll();
-    }
-
-    public function getEtiquetasById($id){
-        return $this->select('e.*')
-            ->join('pelicula_etiqueta pe', 'pe.pelicula_id = peliculas.id')
-            ->join('etiquetas e', 'e.id = pe.etiqueta_id')
-            ->where('peliculas.id', $id)
-            ->findAll();
-    }
 }

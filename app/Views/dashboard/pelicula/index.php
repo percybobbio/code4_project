@@ -8,6 +8,7 @@
             <tr>
                 <th>Título</th>
                 <th>Descripción</th>
+                <th>Categoría</th>
                 <th>Opciones</th>
             </tr>
         </thead>
@@ -17,9 +18,11 @@
                     <td><?= $p->id ?></td>
                     <td><?= $p->titulo ?></td>
                     <td><?= $p->descripcion ?></td>
+                    <td><?= $p->categoria ?></td>
                     <td>
                         <a href="/dashboard/pelicula/show/<?= $p->id ?>">Ver</a>
                         <a href="/dashboard/pelicula/edit/<?= $p->id ?>">Editar</a>
+                        <a href="<?= route_to('pelicula.etiquetas', $p->id) ?>">Etiqueta</a>
                         <form action="/dashboard/pelicula/delete/<?= $p->id ?>" method="post">
                             <button type="submit">Eliminar</button>
                         </form>

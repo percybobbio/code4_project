@@ -4,11 +4,11 @@ namespace App\Database\Migrations;
 
 use CodeIgniter\Database\Migration;
 
-class Peliculas extends Migration
+class Etiquetas extends Migration
 {
-    //En el caso de up y down son para crear y revertir respectivamente 
     public function up()
     {
+        //
         $this->forge->addField([
             'id' => [
                 'type' => 'INT',
@@ -29,24 +29,18 @@ class Peliculas extends Migration
                 'type' => 'VARCHAR',
                 'constraint' => 255,
             ],
-
-            'descripcion' => [
-                'type' => 'TEXT',
-                'null' => TRUE,
-
-            ]
            
         ]);
 
         $this->forge->addKey('id', TRUE);
         $this->forge->addKey('categoria_id');
         $this->forge->addForeignKey('categoria_id','categorias','id', 'CASCADE', 'CASCADE');
-        $this->forge->createTable('peliculas');
-
+        $this->forge->createTable('etiquetas');
     }
 
     public function down()
     {
-        $this->forge->dropTable('peliculas');
+        //
+        $this->forge->dropTable('etiquetas');
     }
 }
