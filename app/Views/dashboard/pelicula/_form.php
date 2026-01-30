@@ -12,5 +12,10 @@
 <textarea id="descripcion" name="descripcion" placeholder="Descripcion" required>
             <?= old('descripcion', $pelicula->descripcion) ?>
         </textarea><br><br>
+<?php if($pelicula->id): ?>
+    <label for="imagen">Imagen:</label>
+        <input type="file" name="imagen" id="imagen">
+
+<?php endif; ?>
 
 <button type="submit"><?= $op ?></button>

@@ -23,7 +23,7 @@ class Pelicula extends BaseController
 
         //uso de la funcion privada para generar una imagen de prueba
         //$this->generar_imagen();
-        $this->asignar_imagen();
+        //$this->asignar_imagen();
 
         $data = [
             // Traemos películas con su categoría asociada
@@ -47,22 +47,26 @@ class Pelicula extends BaseController
         ]);
     }
 
-    public function show($id){
+    public function show($id)
+    {
         $peliculaModel = new PeliculaModel();
         $imagenModel = new ImagenModel();
 
         //var_dump($peliculaModel->getImagesById($id));
         //var_dump($imagenModel->getPeliculasById(2));
 
-        echo view('dashboard/pelicula/show',
-         [
-            'pelicula' => $peliculaModel->asObject()->find($id),
-            'imagenes' => $peliculaModel->getImagesById($id),
-            'etiquetas' => $peliculaModel->getEtiquetasById($id)
-         ]);
+        echo view(
+            'dashboard/pelicula/show',
+            [
+                'pelicula' => $peliculaModel->asObject()->find($id),
+                'imagenes' => $peliculaModel->getImagesById($id),
+                'etiquetas' => $peliculaModel->getEtiquetasById($id)
+            ]
+        );
     }
 
-    public function create(){
+    public function create()
+    {
         $peliculaModel = new PeliculaModel();
 
         if ($this->validate('peliculas')) {
@@ -71,8 +75,7 @@ class Pelicula extends BaseController
                 'descripcion' => $this->request->getPost('descripcion'),
                 'categoria_id' => $this->request->getPost('categoria_id')
             ]);
-
-        }else{
+        } else {
             session()->setFlashdata([
                 'validation' => $this->validator
             ]);
@@ -81,29 +84,33 @@ class Pelicula extends BaseController
         }
 
         return redirect()->to('dashboard/pelicula')->with('mensaje', 'Película creada correctamente');
-        
     }
 
-    public function edit($id) {
+    public function edit($id)
+    {
         $peliculaModel = new PeliculaModel();
         $categoriaModel = new CategoriaModel();
 
-        echo view('dashboard/pelicula/edit',[
+        echo view('dashboard/pelicula/edit', [
             'pelicula' => $peliculaModel->find($id),
             'categorias' => $categoriaModel->find()
         ]);
     }
 
-    public function update($id) {
+    public function update($id)
+    {
         $peliculaModel = new PeliculaModel();
 
         if ($this->validate('peliculas')) {
-            $peliculaModel->update($id,[
+            $peliculaModel->update($id, [
                 'titulo' => $this->request->getPost('titulo'),
                 'descripcion' => $this->request->getPost('descripcion'),
                 'categoria_id' => $this->request->getPost('categoria_id')
             ]);
-        }else{
+
+            // Llamada a la función privada para subir la imagen
+            $this->subir_imagen($id);
+        } else {
             session()->setFlashdata([
                 'validation' => $this->validator
             ]);
@@ -116,41 +123,26 @@ class Pelicula extends BaseController
         return redirect()->to('dashboard/pelicula')->with('mensaje', 'Película actualizada correctamente');
     }
 
-    public function delete($id){
+    public function delete($id)
+    {
         $peliculaModel = new PeliculaModel();
         $peliculaModel->delete($id);
         return redirect()->back()->with('mensaje', 'Película eliminada correctamente');
     }
 
-    private function generar_imagen(){
-        $imagenModel = new ImagenModel();
-        $imagenModel->insert([
-            'imagen' => date('Y-m-d H:i:s'),
-            'extension' => 'ruta/de/imagen.jpg',
-            'data' => 'Descripción de la imagen'
-        ]);
-    }
-
-    private function asignar_imagen(){
-        $peliculaImagenModel = new PeliculaImagenModel();;
-        $peliculaImagenModel->insert([
-            'imagen_id' => 2,
-            'pelicula_id' => 3
-        ]);
-    }
-
-    public function etiquetas($id){
+    public function etiquetas($id)
+    {
         $categoriaModel = new CategoriaModel();
         $etiquetaModel = new EtiquetaModel();
         $peliculaModel = new PeliculaModel();
 
         $etiquetas = [];
 
-        if($this->request->getGet('categoria_id')){
+        if ($this->request->getGet('categoria_id')) {
             $etiquetas = $etiquetaModel->where('categoria_id', $this->request->getGet('categoria_id'))->findAll();
         }
 
-        echo view('dashboard/pelicula/etiquetas',[
+        echo view('dashboard/pelicula/etiquetas', [
             'pelicula' => $peliculaModel->find($id),
             'categorias' => $categoriaModel->findAll(),
             'categoria_id' => $this->request->getGet('categoria_id'),
@@ -158,7 +150,8 @@ class Pelicula extends BaseController
         ]);
     }
 
-    public function etiquetas_post($id){
+    public function etiquetas_post($id)
+    {
         // Aquí iría la lógica para manejar el envío del formulario de etiquetas
         $peliculaEtiquetaModel = new PeliculaEtiquetaModel();
         $etiquetaId = $this->request->getPost('etiqueta_id');
@@ -168,7 +161,7 @@ class Pelicula extends BaseController
             ->where('pelicula_id', $peliculaId)
             ->first();
 
-        if(!$peliculaEtiqueta){
+        if (!$peliculaEtiqueta) {
             $peliculaEtiquetaModel->insert([
                 'pelicula_id' => $peliculaId,
                 'etiqueta_id' => $etiquetaId
@@ -178,7 +171,8 @@ class Pelicula extends BaseController
         return redirect()->back()->with('mensaje', 'Etiqueta asignada correctamente');
     }
 
-    public function etiqueta_delete($id, $etiqueta_id){
+    public function etiqueta_delete($id, $etiqueta_id)
+    {
         $peliculaEtiqueta = new PeliculaEtiquetaModel();
         $peliculaEtiqueta
             ->where('pelicula_id', $id)
@@ -186,5 +180,67 @@ class Pelicula extends BaseController
             ->delete();
 
         return $this->response->setJSON(['message' => 'Etiqueta eliminada correctamente']);
+    }
+
+    private function subir_imagen($peliculaId)
+    {
+        // Lógica para subir una imagen y asociarla a la película
+        $imagefile = $this->request->getFile('imagen');
+        if ($imagefile->isValid()) {
+            $validated = $this->validate([
+                'imagen' => 'uploaded[imagen]|max_size[imagen,4096]|is_image[imagen]|mime_in[imagen,image/jpg,image/jpeg,image/png]'
+            ]);
+
+            if ($validated) {
+                $imagenNombre = $imagefile->getRandomName();
+                $imagefile->move('../public/uploads/peliculas', $imagenNombre);
+
+                $imagenModel = new ImagenModel();
+                $imagenId = $imagenModel->insert([
+                    'imagen' => $imagenNombre,
+                    'extension' => $imagefile->getClientExtension(),
+                    'data' => 'Descripción de la imagen'
+                ]);
+
+                $peliculaImagenModel = new PeliculaImagenModel();;
+                $peliculaImagenModel->insert([
+                    'imagen_id' => $imagenId,
+                    'pelicula_id' => $peliculaId
+                ]);
+            }
+
+            return $this->validator->listErrors();
+        }
+    }
+
+    public function borrar_imagen($imagenId){
+        $imagenModel = new ImagenModel();
+        $peliculaImagenModel = new PeliculaImagenModel();
+
+        $imagen =$imagenModel->find($imagenId);
+
+        if($imagen == null){
+            return redirect()->back()->with('error', 'La imagen no existe');
+        }
+
+        $imageRuta = FCPATH . 'uploads/peliculas/' . $imagen->imagen;
+        unlink($imageRuta);
+        
+        $peliculaImagenModel->where('imagen_id', $imagenId)->delete();
+        $imagenModel->delete($imagenId);
+
+        return redirect()->back()->with('mensaje', 'Imagen eliminada correctamente');
+    }
+
+    public function descargar_imagen($imagenId){
+        $imagenModel = new ImagenModel();
+        $imagen = $imagenModel->find($imagenId);
+
+        if($imagen == null){
+            return redirect()->back()->with('error', 'La imagen no existe');
+        }
+
+        //Usamos response porque ya tenemos la respuesta preparada para descargas, se pasa el parametro null para indicar que no tenemos data extra
+        return $this->response->download(FCPATH . 'uploads/peliculas/' . $imagen->imagen , null)->setFileName('imagen.' . $imagen->extension);
     }
 }

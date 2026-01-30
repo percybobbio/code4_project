@@ -1,6 +1,7 @@
 <?php
 
 use App\Controllers\Api\Pelicula;
+use App\Controllers\Dashboard\Pelicula as DashboardPelicula;
 use App\Controllers\Web\Usuario;
 use CodeIgniter\Router\RouteCollection;
 
@@ -22,6 +23,8 @@ $routes->group('dashboard', function($routes){
     //A veces se debe colocar las rutas mas espeficas antes de las generales
     $routes->get('pelicula/etiquetas/(:num)', 'Dashboard\Pelicula::etiquetas/$1', ['as' => 'pelicula.etiquetas']);
     $routes->post('pelicula/etiquetas/(:num)', 'Dashboard\Pelicula::etiquetas_post/$1', ['as' => 'pelicula.etiquetas']);
+    $routes->post('pelicula/imagen_delete/(:num)', [DashboardPelicula::class, 'borrar_imagen'], ['as' => 'pelicula.borrar_imagen']);
+    $routes->get('pelicula/imagen_descargar/(:num)', [DashboardPelicula::class, 'descargar_imagen'], ['as' => 'pelicula.descargar_imagen']);
     $routes->post('pelicula/(:num)/etiquetas/(:num)/delete', 'Dashboard\Pelicula::etiqueta_delete/$1/$2', ['as' => 'pelicula.etiqueta.delete']);
     $routes->presenter('pelicula' , ['controller' => 'Dashboard\Pelicula']);
     //$routes->get('index', 'Pelicula::index', ['as' => 'pelicula.index']);

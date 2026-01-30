@@ -2,7 +2,7 @@
 <?= $this->section('contenido') ?>
 
 <?= view('partials/_form-error') ?>
-    <form action="/dashboard/pelicula/update/<?= $pelicula->id ?>" method="post">
+    <form enctype="multipart/form-data" action="/dashboard/pelicula/update/<?= $pelicula->id ?>" method="post">
         <?= view('dashboard/pelicula/_form', ['op' => 'Actualizar Película'])?>
     </form>
 <?= $this->endSection() ?>
