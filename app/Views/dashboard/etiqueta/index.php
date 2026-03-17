@@ -28,4 +28,5 @@
             <?php endforeach; ?>
         </tbody>
     </table>
+<?= $pager->links() ?>
 <?= $this->endSection() ?>

@@ -30,7 +30,9 @@ class Pelicula extends BaseController
             'peliculas' => $peliculaModel
                 ->select('peliculas.*, categorias.titulo as categoria')
                 ->join('categorias', 'categorias.id = peliculas.categoria_id')
-                ->findAll(),
+                ->paginate(5),
+                'pager' => $peliculaModel->pager
+                //->findAll(),
         ];
 
         echo view('dashboard/pelicula/index', $data);
@@ -184,6 +186,7 @@ class Pelicula extends BaseController
 
     private function subir_imagen($peliculaId)
     {
+        header('filesystem');
         // Lógica para subir una imagen y asociarla a la película
         $imagefile = $this->request->getFile('imagen');
         if ($imagefile->isValid()) {
@@ -199,7 +202,7 @@ class Pelicula extends BaseController
                 $imagenId = $imagenModel->insert([
                     'imagen' => $imagenNombre,
                     'extension' => $imagefile->getClientExtension(),
-                    'data' => 'Descripción de la imagen'
+                    'data' => json_encode(get_file_info( '../public/uploads/peliculas/' . $imagenNombre))
                 ]);
 
                 $peliculaImagenModel = new PeliculaImagenModel();;

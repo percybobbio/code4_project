@@ -12,7 +12,9 @@ class Categoria extends BaseController
         session()->set('key', 'value');
         $categoriaModel = new CategoriaModel();
         echo view('dashboard/categoria/index',[
-            'categorias' => $categoriaModel->findAll()
+            'categorias' => $categoriaModel->paginate(5),
+            'pager' => $categoriaModel->pager
+            //->findAll()
         ]);
     }
 
